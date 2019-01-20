@@ -2,8 +2,8 @@
 
 #noenv
 #singleinstance,force
-sendmode input
-setworkingdir %a_scriptdir%
+sendmode,input
+setworkingdir,%a_scriptdir%
 coordmode,mouse,client
 coordmode,pixel,client
 
