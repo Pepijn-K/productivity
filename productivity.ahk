@@ -12,13 +12,22 @@ coordmode,pixel,client
 
 F10::reload
 F11::exitapp
-lctrl::capslock
 lshift::lctrl
 capslock::lshift
+;1::^w
+;2::+^Tab
+;3::^Tab
+;4::^t
+;5::^r
+
+; #### Mouse keys ####
++rbutton::send,^c
+^rbutton::send,^v
++^rbutton::send,^v{enter}
 
 ; #### Winkey Tasks ####
 #c::									; call multibox
-	inputbox,usin,Tell me,,,240,120
+	inputbox,usin,Multibox,,,240,120
 	if errorlevel
 		return
 	else
@@ -49,8 +58,12 @@ return
 
 ; #### Hotstrings ####
 ::mytel::{+}353 (0) 91 433532
-::ct#::send,sap_cloud_terminations@sap.com{tab 2}^a{backspace}
-::dt::send % gen_dt()
+::@ct::send,sap_cloud_terminations@sap.com{tab 2}^a{backspace}
+::@jana::jana.kerschl.sudekova@sap.com
+::dt::
+	date := gen_dt()
+	send % date
+return
 
 
 ; ############ FUNCTIONS ############
@@ -65,7 +78,7 @@ gen_dt(format := "yyyMMdd") {
 	return res
 }
 
-search(result) {
+search(query) {
 	if(winexist("ahk_exe chrome.exe"))
 		{
 		winactivate
@@ -77,5 +90,5 @@ search(result) {
 		winwaitactive
 		}
 	sleep,400
-	send,%result%{enter}
+	send,%query%{enter}
 }
