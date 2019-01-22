@@ -7,8 +7,6 @@ coordmode,mouse,client
 coordmode,pixel,client
 
 ; #### Common URLs ####
-sfp := "https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm"
-crm := "https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm"
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,30
 ifmsgbox,yes
@@ -26,63 +24,13 @@ NumpadSub::^Tab
 NumpadAdd::^t
 
 ; #### Numpad keys ####
-^Numpad1::
-	if(winexist("ahk_pid " outlook_pid))
-		winactivate
-	else
-		outlook_pid := run("outlook")
-return
-
-^Numpad2::
-	if(winexist("ahk_pid " onenote_pid))
-		winactivate
-	else
-		onenote_pid := run("onenote")
-return
-
-^Numpad3::
-	if(winexist("ahk_pid " logon_pid))
-		winactivate
-	else
-		logon_pid := run("saplogon")
-return
-
-^Numpad4::
-	if(winexist("ahk_pid " ssf1_pid))
-		winactivate
-	else
-		ssf1_pid := open(sfp)
-return
-
-^Numpad5::
-	if(winexist("ahk_pid " ssf2_pid))
-		winactivate
-	else
-		ssf2_pid := open(sfp)
-return
-
-^Numpad6::
-	if(winexist("ahk_pid " crm_pid))
-		winactivate
-	else
-		crm_pid := open(crm)
-return
-
-^Numpad7::
-	if(winexist("ahk_pid " sto_pid))
-		winactivate
-	else
-		sto_pid := run("firefox")
-return
-
-
-/*
-loop,9
-	{
-	keyname := "Numpad" a_index
-	hotkey
-
-*/
+^Numpad1::pid1 := do("outlook",pid1)
+^Numpad2::pid2 := do("onenote",pid2)
+^Numpad3::pid3 := do("logon",pid3)
+^Numpad4::pid4 := do("ssf",pid4)
+^Numpad5::pid5 := do("ssf",pid5)
+^Numpad6::pid6 := do("crm",pid6)
+^Numpad7::pid7 := do("store",pid7)
 
 ; #### Mouse keys ####
 +rbutton::send,^c
@@ -115,13 +63,15 @@ return
 return
 
 #s::									; search selected
+	clipboard := ""
 	send,^c
-	search(a_clipboard)
+	clipwait
+	search(clipboard)
 return
 
 #d::									; create Outlook task from anywhere
 	settitlematchmode,2
-	if(winexist("ahk_pid " outlook_pid))
+	if(winexist("ahk_pid " pid1))
 		winactivate
 	else
 		return
@@ -133,7 +83,7 @@ return
 :*:@ct::send,sap_cloud_terminations@sap.com{tab 2}^a{backspace}
 :*:@jana::jana.kerschl.sudekova@sap.com
 ::@msol::marisol.torres@sap.com
-::dt::
+::tod::
 	date := gen_dt()
 	send % date
 return
@@ -142,12 +92,12 @@ return
 ; ############ SUBROUTINES ############
 
 runsap:
-	run,outlook.exe,,,outlook_pid
-	run,onenote.exe,,,onenote_pid
-	run,saplogon.exe,,,logon_pid
-	run,%ssf%,,,ssf1_pid
-	run,%ssf%,,,ssf2_pid
-	run,%crm%,,,crm_pid
+	do("outlook",pid1)
+	do("onenote",pid2)
+	do("logon",pid3)
+	do("ssf",pid4)
+	do("ssf",pid5)
+	do("crm",pid6)
 return
 
 
@@ -174,22 +124,18 @@ search(query) {
 		run,chrome.exe
 		winwaitactive
 		}
-	sleep,400
-	send,%query%{enter}
+	sleep,200
+	send %query% {enter}
 }
 
-run(exe) {
-	if(exe = "firefox")
-		exe .= ".exe -private-window https://www.sapstore.com/"
+do(p,id) {
+	if(!id)
+		{
+		iniread,src,lib/db.ini,running,%p%
+		run % src
+		}
 	else
-		exe .= ".exe"
-	run,%exe%,,,pid
-	return pid
-}
-
-open(url) {
-	run,%url%,,,pid
-	return pid
+		winactivate,ahk_pid %id%	
 }
 
 sum(x*) {
