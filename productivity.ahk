@@ -31,8 +31,9 @@ NumpadAdd::^t
 ^Numpad4::pid4 := do("ssf",pid4)
 ^Numpad5::pid5 := do("ssf",pid5)
 ^Numpad6::pid6 := do("crm",pid6)
-^Numpad7::pid7 := do("store",pid7)
-^Numpad8::pid8 := do("bydstore",pid8)
+^Numpad7::pid7 := do("bo",pid7)
+^Numpad8::pid8 := do("store",pid8)
+^Numpad9::pid9 := do("bydstore",pid9)
 
 ; #### Mouse keys ####
 +rbutton::send,^c
@@ -48,7 +49,7 @@ NumpadAdd::^t
 		{
 		iniread,val,lib/db.ini,mbsearch,%usin%,0
 		if(val)
-			run,%val%
+			run % val
 		else
 			search(usin)
 		}
@@ -73,11 +74,18 @@ return
 
 #d::									; create Outlook task from anywhere
 	settitlematchmode,2
-	if(winexist("ahk_pid " pid1))
+	if(winactive("- Task"))
+		{
+		sleep,200
+		send,{lalt}1{alt}fc
+		}
+	else if(winexist("ahk_pid " pid1))
+		{
 		winactivate
+		send,+^k
+		}
 	else
 		return
-	send,+^k
 return
 
 #w::									; send working hours email
@@ -137,17 +145,13 @@ return
 		}
 return
 
-grab_cred(byref u, byref p) {
-	iniread,u,%login%,access,%u%
-	iniread,p,%login%,access,%p%
-}
-
 
 ; #### Hotstrings ####
 ::mytel::{+}353 (0) 91 433532
 :*:@ct::send,sap_cloud_terminations@sap.com{tab 2}^a{backspace}
 :*:@jana::jana.kerschl.sudekova@sap.com
 ::@msol::marisol.torres@sap.com
+::sig::{lalt}eas{enter}
 ::tod::
 	date := gen_dt()
 	send % date
@@ -194,14 +198,14 @@ search(query) {
 }
 
 do(p,id) {
-	if(!id)
-		{
-		iniread,src,lib/db.ini,running,%p%
-		run % src,,,pid
-		}
+	if(winexist("ahk_pid " id))
+		winactivate
 	else
-		winactivate,ahk_pid %id%
-	return pid
+		{
+		iniread,p_res,lib/db.ini,running,%p%
+		run % p_res,,,id
+		}
+	return id
 }
 
 sum(x*) {
