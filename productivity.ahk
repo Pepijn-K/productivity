@@ -150,7 +150,12 @@ return
 ::mytel::{+}353 (0) 91 433532
 :*:@ct::send,sap_cloud_terminations@sap.com{tab 2}^a{backspace}
 :*:@jana::jana.kerschl.sudekova@sap.com
-::@msol::marisol.torres@sap.com
+:*:@msol::marisol.torres@sap.com
+::tfgit::Thanks for getting in touch.
+::tyfyi::Thank you for your interest!
+::tyffu::Thank you for following up.
+::itaeichw::If there's anything else I can help with please don't hesitate to let me know.
+::itdnsti::If this does not solve the issue please let me know in a reply and I will investigate further.
 ::sig::{lalt}eas{enter}
 ::tod::
 	date := gen_dt()
