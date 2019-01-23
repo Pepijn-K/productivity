@@ -6,7 +6,8 @@ sendmode,input
 coordmode,mouse,client
 coordmode,pixel,client
 
-; #### Common URLs ####
+; #### VARs ####
+global login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,30
 ifmsgbox,yes
@@ -31,6 +32,7 @@ NumpadAdd::^t
 ^Numpad5::pid5 := do("ssf",pid5)
 ^Numpad6::pid6 := do("crm",pid6)
 ^Numpad7::pid7 := do("store",pid7)
+^Numpad8::pid8 := do("bydstore",pid8)
 
 ; #### Mouse keys ####
 +rbutton::send,^c
@@ -77,6 +79,69 @@ return
 		return
 	send,+^k
 return
+
+#w::									; send working hours email
+	inputbox,locnhrs,Location and hours per day,,,180,120
+	if(errorlevel)
+		return
+	loop,parse,locnhrs,csv
+		{
+		if(a_loopfield = 8)
+			lh := "8:00 - 16:00"
+		else if(a_loopfield = 9)
+			lh := "9:00 - 17:00"
+		else if(a_loopfield = "h")
+			lh := "home"
+		else if(a_loopfield = "o")
+			lh := "office"
+		else
+			lh := "NULL"
+		lh%a_index% := lh
+		}
+	settitlematchmode,1
+	if(winexist("ahk_pid " pid1))
+		winactivate
+	else
+		{
+		pid1 := do("outlook",pid1)
+		winwaitactive
+		}
+	send,^n
+	sleep,600
+	send,ann{enter}car{enter}joh{enter}{tab}wain{enter}{tab 2}Working hours this week{tab}
+(
+Hi guys,
+
+Monday: %lh1%, %lh2%
+Tuesday: %lh3%, %lh4%
+Wednesday: %lh5%, %lh6%
+Thursday: %lh7%, %lh8%
+Friday: %lh9%, %lh10%
+)
+return
+
+!#l::									; login common websites
+	sleep,300
+	settitlematchmode,1
+	if(winactive("Logon - Internet Explorer"))						; KCF Frontend
+		{
+		iniread,u,%login%,access,usr_gbl
+		iniread,p,%login%,access,pw_s10
+		Send,%u%{tab}%p%{enter}
+		}
+	else if WinActive("SAP Store | Buy SAP Software")				; ASM
+		{
+		iniread,u,%login%,access,usr_gbl
+		iniread,p,%login%,access,pw_str
+		Send,%u%{tab}%p%{enter}
+		}
+return
+
+grab_cred(byref u, byref p) {
+	iniread,u,%login%,access,%u%
+	iniread,p,%login%,access,%p%
+}
+
 
 ; #### Hotstrings ####
 ::mytel::{+}353 (0) 91 433532
@@ -132,10 +197,11 @@ do(p,id) {
 	if(!id)
 		{
 		iniread,src,lib/db.ini,running,%p%
-		run % src
+		run % src,,,pid
 		}
 	else
-		winactivate,ahk_pid %id%	
+		winactivate,ahk_pid %id%
+	return pid
 }
 
 sum(x*) {
