@@ -161,12 +161,12 @@ return
 ; ############ SUBROUTINES ############
 
 runsap:
-	do("outlook",pid1)
-	do("onenote",pid2)
-	do("logon",pid3)
-	do("ssf",pid4)
-	do("ssf",pid5)
-	do("crm",pid6)
+	pid1 := do("outlook",pid1)
+	pid2 := do("onenote",pid2)
+	pid3 := do("logon",pid3)
+	pid4 := do("ssf",pid4)
+	pid5 := do("ssf",pid5)
+	pid6 := do("crm",pid6)
 return
 
 
