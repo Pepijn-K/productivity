@@ -145,6 +145,13 @@ return
 		}
 return
 
+#y::
+	inputbox,patopa,Path to be converted,,,180,120
+	if errorlevel
+		return
+	clipboard := strreplace(patopa,"\","/")
+return
+
 
 ; #### Hotstrings ####
 ::mytel::{+}353 (0) 91 433532
