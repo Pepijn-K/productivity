@@ -146,7 +146,7 @@ return
 return
 
 #y::
-	inputbox,patopa,Path to be converted,,,180,120
+	inputbox,patopa,Path to be converted,,,200,120
 	if errorlevel
 		return
 	clipboard := strreplace(patopa,"\","/")
