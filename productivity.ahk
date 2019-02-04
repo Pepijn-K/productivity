@@ -6,6 +6,8 @@ sendmode,input
 coordmode,mouse,client
 coordmode,pixel,client
 
+sleep,10000
+
 ; #### VARs ####
 global login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
@@ -16,7 +18,6 @@ ifmsgbox,yes
 ; ############ HOTKEYS ############
 
 F10::reload
-F11::exitapp
 lshift::lctrl
 capslock::lshift
 NumpadMult::^w
@@ -77,7 +78,7 @@ return
 	if(winactive("- Task"))
 		{
 		sleep,200
-		send,{lalt}1{alt}fc
+		send,{alt}hav
 		}
 	else if(winexist("ahk_pid " pid1))
 		{
@@ -152,10 +153,11 @@ return
 	clipboard := strreplace(patopa,"\","/")
 return
 
+#include lib/wiggle.ahk
 
 ; #### Hotstrings ####
 ::mytel::{+}353 (0) 91 433532
-:*:@ct::send,sap_cloud_terminations@sap.com{tab 2}^a{backspace}
+:*:@ct::sap_cloud_terminations@sap.com{tab 2}^a{backspace}
 :*:@jana::jana.kerschl.sudekova@sap.com
 :*:@msol::marisol.torres@sap.com
 ::tfgit::Thanks for getting in touch.
