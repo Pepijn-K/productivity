@@ -5,6 +5,7 @@ setworkingdir,%a_scriptdir%
 sendmode,input
 coordmode,mouse,client
 coordmode,pixel,client
+settitlematchmode,2
 
 sleep,10000
 
@@ -26,15 +27,25 @@ NumpadSub::^Tab
 NumpadAdd::^t
 
 ; #### Numpad keys ####
-^Numpad1::pid1 := do("outlook",pid1)
-^Numpad2::pid2 := do("onenote",pid2)
-^Numpad3::pid3 := do("logon",pid3)
-^Numpad4::pid4 := do("ssf",pid4)
-^Numpad5::pid5 := do("ssf",pid5)
-^Numpad6::pid6 := do("crm",pid6)
-^Numpad7::pid7 := do("bo",pid7)
-^Numpad8::pid8 := do("store",pid8)
-^Numpad9::pid9 := do("bydstore",pid9)
+^Numpad1::one := do(one)
+	if(one)
+		winactivate,ahk_id one
+	else
+		{
+		run,outlook.exe
+		winwait
+		h := winexist("- Outlook")
+		}
+	return h
+
+^Numpad2::two := do("- OneNote")
+^Numpad3::three := do("Skype ")
+^Numpad4::four := do("SAP Store op")
+^Numpad5::five := do("SAP Store op")
+^Numpad6::six := do("Home - [SAP]")
+^Numpad7::seven := do("hybris Backoffice - Google Chrome")
+^Numpad8::eight := do("Buy SAP Software")
+^Numpad9::nine := do("Welcome | SAP Store")
 
 ; #### Mouse keys ####
 +rbutton::send,^c
@@ -160,6 +171,7 @@ return
 :*:@ct::sap_cloud_terminations@sap.com{tab 2}^a{backspace}
 :*:@jana::jana.kerschl.sudekova@sap.com
 :*:@msol::marisol.torres@sap.com
+:*:@jette:jette.bork-wagenblast@sap.common
 ::tfgit::Thanks for getting in touch.
 ::tyfyi::Thank you for your interest!
 ::tyffu::Thank you for following up.
@@ -177,7 +189,7 @@ return
 runsap:
 	pid1 := do("outlook",pid1)
 	pid2 := do("onenote",pid2)
-	pid3 := do("logon",pid3)
+	pid3 := do("lync",pid3)
 	pid4 := do("ssf",pid4)
 	pid5 := do("ssf",pid5)
 	pid6 := do("crm",pid6)
@@ -211,13 +223,16 @@ search(query) {
 	send %query% {enter}
 }
 
-do(p,id) {
-	if(winexist("ahk_pid " id))
+do(t) {
+	settitlematchmode,2
+	id := winexist(t)
+	if(id)
 		winactivate
 	else
 		{
-		iniread,p_res,lib/db.ini,running,%p%
-		run % p_res,,,id
+		iniread,p_res,lib/db.ini,running,%t%
+		run % p_res
+		winwait,t
 		}
 	return id
 }
