@@ -7,8 +7,6 @@ coordmode,mouse,client
 coordmode,pixel,client
 settitlematchmode,2
 
-sleep,10000
-
 ; #### VARs ####
 global login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
@@ -27,25 +25,15 @@ NumpadSub::^Tab
 NumpadAdd::^t
 
 ; #### Numpad keys ####
-^Numpad1::one := do(one)
-	if(one)
-		winactivate,ahk_id one
-	else
-		{
-		run,outlook.exe
-		winwait
-		h := winexist("- Outlook")
-		}
-	return h
-
-^Numpad2::two := do("- OneNote")
-^Numpad3::three := do("Skype ")
-^Numpad4::four := do("SAP Store op")
-^Numpad5::five := do("SAP Store op")
-^Numpad6::six := do("Home - [SAP]")
-^Numpad7::seven := do("hybris Backoffice - Google Chrome")
-^Numpad8::eight := do("Buy SAP Software")
-^Numpad9::nine := do("Welcome | SAP Store")
+^Numpad1::one_id := do(one_id,"one","one_name")		; window: x: 592	y: 0	w: 1748	h: 1450
+^Numpad2::two_id := do(two_id,"two","two_name")		; window: x: 990	y: 0	w: 1287	h: 1450
+^Numpad3::three_id := do(three_id,"three","three_name")	; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
+^Numpad4::four_id := do(four_id,"four","four_name")	; window: x: 321	y: 0	w: 2088	h: 1459
+^Numpad5::five_id := do(five_id,"five","five_name") 	; window: x: 406	y: 0	w: 2003	h: 1459
+^Numpad6::six_id := do(six_id,"six","six_name")		; window: x: 494	y: 0	w: 1915	h: 1459
+^Numpad7::seven_id := do(seven_id,"seven","seven_name") ; window: irr (FOLLOW CHROME)
+^Numpad8::eight_id := do(eight_id,"eight","eight_name")	; window: x: 449	y: 70	w: 1794	h: 1320
+^Numpad9::nine_id := do(nine_id,"nine","nine_name")	; window: x: 449	y: 70	w: 1794	h: 1320
 
 ; #### Mouse keys ####
 +rbutton::send,^c
@@ -123,7 +111,7 @@ return
 		winactivate
 	else
 		{
-		pid1 := do("outlook",pid1)
+		pid1 := do(one_id,one,one_name)
 		winwaitactive
 		}
 	send,^n
@@ -138,6 +126,20 @@ Wednesday: %lh5%, %lh6%
 Thursday: %lh7%, %lh8%
 Friday: %lh9%, %lh10%
 )
+return
+
+#o::									; ask Silvia for processor of O2I ticket
+	if(winexist(one))
+		{
+		winactivate
+		send,^1{lalt}hn1
+		}
+	else
+		{
+		run,notepad.exe
+		winwaitactive
+		}
+	send,silvia.peves@sap.com{tab 4}Ticket %clipboard%{tab}Hi Silvia,{enter 2}Could you please tell me who owns the above ticket?{enter 2}Many thanks!
 return
 
 !#l::									; login common websites
@@ -187,12 +189,12 @@ return
 ; ############ SUBROUTINES ############
 
 runsap:
-	pid1 := do("outlook",pid1)
-	pid2 := do("onenote",pid2)
-	pid3 := do("lync",pid3)
-	pid4 := do("ssf",pid4)
-	pid5 := do("ssf",pid5)
-	pid6 := do("crm",pid6)
+	one_id := do(one_id,"one","one_name")			; window: x: 592	y: 0	w: 1748	h: 1450
+	two_id := do(two_id,"two","two_name")			; window: x: 990	y: 0	w: 1287	h: 1450
+	three_id := do(three_id,"three","three_name")	; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
+	four_id := do(four_id,"four","four_name")		; window: x: 321	y: 0	w: 2088	h: 1459
+	five_id := do(five_id,"five","five_name") 		; window: x: 406	y: 0	w: 2003	h: 1459
+	six_id := do(six_id,"six","six_name")			; window: x: 494	y: 0	w: 1915	h: 1459
 return
 
 
@@ -223,18 +225,19 @@ search(query) {
 	send %query% {enter}
 }
 
-do(t) {
+do(id,pr,n) {
 	settitlematchmode,2
-	id := winexist(t)
 	if(id)
-		winactivate
+		winactivate,ahk_id %id%
 	else
 		{
-		iniread,p_res,lib/db.ini,running,%t%
-		run % p_res
-		winwait,t
+		iniread,app,lib/db.ini,running,%pr%
+		iniread,appname,lib/db.ini,running,%n%
+		run % app
+		winwait,%appname%
+		h := winexist(appname)
 		}
-	return id
+	return h
 }
 
 sum(x*) {
