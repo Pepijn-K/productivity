@@ -111,7 +111,7 @@ return
 		winactivate
 	else
 		{
-		pid1 := do(one_id,one,one_name)
+		run,notepad.exe
 		winwaitactive
 		}
 	send,^n
