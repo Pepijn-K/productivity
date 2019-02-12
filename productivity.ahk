@@ -171,6 +171,8 @@ return
 	clipboard := strreplace(patopa,"\","/")
 return
 
+#r::winmove,a,,400,25,1000,800		; move and resize active window
+
 #include lib/wiggle.ahk
 
 ; #### Hotstrings ####
