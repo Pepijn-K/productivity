@@ -7,8 +7,11 @@ coordmode,mouse,client
 coordmode,pixel,client
 settitlematchmode,2
 
+; #### GUIs ####
+#include lib/wait.ahk
+
 ; #### VARs ####
-global login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
+login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,30
 ifmsgbox,yes
@@ -25,15 +28,17 @@ NumpadSub::^Tab
 NumpadAdd::^t
 
 ; #### Numpad keys ####
-^Numpad1::one_id := do(one_id,"one","one_name")		; window: x: 592	y: 0	w: 1748	h: 1450
-^Numpad2::two_id := do(two_id,"two","two_name")		; window: x: 990	y: 0	w: 1287	h: 1450
-^Numpad3::three_id := do(three_id,"three","three_name")	; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
-^Numpad4::four_id := do(four_id,"four","four_name")	; window: x: 321	y: 0	w: 2088	h: 1459
-^Numpad5::five_id := do(five_id,"five","five_name") 	; window: x: 406	y: 0	w: 2003	h: 1459
-^Numpad6::six_id := do(six_id,"six","six_name")		; window: x: 494	y: 0	w: 1915	h: 1459
+^Numpad1::winactivate,ahk_id %one%		; window: x: 592	y: 0	w: 1748	h: 1450
+^Numpad2::winactivate,ahk_id %two%		; window: x: 990	y: 0	w: 1287	h: 1450
+^Numpad3::winactivate,ahk_id %three%	; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
+^Numpad4::winactivate,ahk_id %four%		; window: x: 321	y: 0	w: 2088	h: 1459
+^Numpad5::winactivate,ahk_id %five% 	; window: x: 406	y: 0	w: 2003	h: 1459
+^Numpad6::winactivate,ahk_id %six%		; window: x: 494	y: 0	w: 1915	h: 1459
+/*
 ^Numpad7::seven_id := do(seven_id,"seven","seven_name") ; window: irr (FOLLOW CHROME)
 ^Numpad8::eight_id := do(eight_id,"eight","eight_name")	; window: x: 449	y: 70	w: 1794	h: 1320
 ^Numpad9::nine_id := do(nine_id,"nine","nine_name")	; window: x: 449	y: 70	w: 1794	h: 1320
+*/
 
 ; #### Mouse keys ####
 +rbutton::send,^c
@@ -62,24 +67,24 @@ return
 	if errorlevel
 		return
 	iniwrite,%dest%,lib/db.ini,mbsearch,%sc%
-	msgbox, % "Enter " sc " to run:`n" dest
+	msgbox % "Enter " sc " to run:`n" dest
 return
 
 #s::									; search selected
+	search_holder := clipboardall
 	clipboard := ""
 	send,^c
 	clipwait
 	search(clipboard)
+	clipboard := search_holder
+	search_holder := ""
 return
 
 #d::									; create Outlook task from anywhere
 	settitlematchmode,2
 	if(winactive("- Task"))
-		{
-		sleep,200
 		send,{alt}hav
-		}
-	else if(winexist("ahk_pid " pid1))
+	else if(winexist("ahk_id " one))
 		{
 		winactivate
 		send,+^k
@@ -107,7 +112,7 @@ return
 		lh%a_index% := lh
 		}
 	settitlematchmode,1
-	if(winexist("ahk_pid " pid1))
+	if(winexist("ahk_id " one))
 		winactivate
 	else
 		{
@@ -129,7 +134,7 @@ Friday: %lh9%, %lh10%
 return
 
 #o::									; ask Silvia for processor of O2I ticket
-	if(winexist(one))
+	if(winexist("ahk_id " one))
 		{
 		winactivate
 		send,^1{lalt}hn1
@@ -189,12 +194,56 @@ return
 ; ############ SUBROUTINES ############
 
 runsap:
-	one_id := do(one_id,"one","one_name")			; window: x: 592	y: 0	w: 1748	h: 1450
-	two_id := do(two_id,"two","two_name")			; window: x: 990	y: 0	w: 1287	h: 1450
-	three_id := do(three_id,"three","three_name")	; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
-	four_id := do(four_id,"four","four_name")		; window: x: 321	y: 0	w: 2088	h: 1459
-	five_id := do(five_id,"five","five_name") 		; window: x: 406	y: 0	w: 2003	h: 1459
-	six_id := do(six_id,"six","six_name")			; window: x: 494	y: 0	w: 1915	h: 1459
+	gui,wait:show,x0 y0 w%a_screenwidth% h%a_screenheight%
+	run,outlook.exe			; window: x: 592	y: 0	w: 1748	h: 1450
+	run,onenote.exe			; window: x: 990	y: 0	w: 1287	h: 1450
+	run,lync.exe			; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
+	one := winexist("ahk_exe OUTLOOK.EXE")
+	two := winexist("ahk_exe ONENOTE.EXE")
+	three := winexist("ahk_exe lync.exe")
+	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm		; window: x: 321	y: 0	w: 2088	h: 1459
+	loop,25
+		{
+		four := winexist("SAP - [Select a business role: ]")
+		if(four)
+			break
+		else
+			{
+			sleep,200
+			continue
+			}
+		}
+	controlsend,,{tab 6}{enter},ahk_id %four%
+	winwait,SAP Store Operations - Level2 - Internet Explorer
+	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm 		; window: x: 406	y: 0	w: 2003	h: 1459
+	loop,25
+		{
+		five := winexist("SAP - [Select a business role: ]")
+		if(five)
+			break
+		else
+			{
+			sleep,200
+			continue
+			}
+		}
+	controlsend,,{tab 6}{enter},ahk_id %five%
+	sleep,4000
+	controlsend,,{tab 2}{down}{tab}{enter},ahk_id %five%
+	run,iexplore.exe https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm			; window: x: 494	y: 0	w: 1915	h: 1459
+	loop,25
+		{
+		six := winexist("Select a business role: - [SAP] - Internet Explorer")
+		if(six)
+			break
+		else
+			{
+			sleep,200
+			continue
+			}
+		}
+	controlsend,,{tab 4}{enter},ahk_id %six%
+	gui,wait:cancel
 return
 
 
@@ -224,7 +273,7 @@ search(query) {
 	sleep,200
 	send %query% {enter}
 }
-
+/*
 do(id,pr,n) {
 	settitlematchmode,2
 	if(id)
@@ -239,7 +288,7 @@ do(id,pr,n) {
 		}
 	return h
 }
-
+*/
 sum(x*) {
 	tot := 0
 	for i, y in x
