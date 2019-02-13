@@ -90,7 +90,7 @@ return
 	settitlematchmode,2
 	if(winactive("- Task"))
 		send,{alt}hav
-	else if(winexist("ahk_id " one))
+	else if(winexist("ahk_id " num1))
 		{
 		winactivate
 		send,+^k
@@ -168,6 +168,7 @@ return
 		iniread,p,%login%,access,pw_str
 		Send,%u%{tab}%p%{enter}
 		}
+	else if(winactive(
 return
 
 #y::
