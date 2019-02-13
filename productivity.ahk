@@ -7,19 +7,25 @@ coordmode,mouse,client
 coordmode,pixel,client
 settitlematchmode,2
 
+; #### VARs ####
+login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
+scaling := 100 / 125
+screenheight := a_screenheight * scaling
+screenwidth := a_screenwidth * scaling
+
 ; #### GUIs ####
 #include lib/wait.ahk
 
-; #### VARs ####
-login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
-msgbox % sum(4,32),Working?,Run SAP related programs?,30
+msgbox % sum(4,32),Working?,Run SAP related programs?,300
 ifmsgbox,yes
 	gosub,runsap
+
 
 ; ############ HOTKEYS ############
 
 F10::reload
+F11::gui,wait: cancel
 lshift::lctrl
 capslock::lshift
 NumpadMult::^w
@@ -28,12 +34,12 @@ NumpadSub::^Tab
 NumpadAdd::^t
 
 ; #### Numpad keys ####
-^Numpad1::winactivate,ahk_id %one%		; window: x: 592	y: 0	w: 1748	h: 1450
-^Numpad2::winactivate,ahk_id %two%		; window: x: 990	y: 0	w: 1287	h: 1450
-^Numpad3::winactivate,ahk_id %three%	; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
-^Numpad4::winactivate,ahk_id %four%		; window: x: 321	y: 0	w: 2088	h: 1459
-^Numpad5::winactivate,ahk_id %five% 	; window: x: 406	y: 0	w: 2003	h: 1459
-^Numpad6::winactivate,ahk_id %six%		; window: x: 494	y: 0	w: 1915	h: 1459
+^Numpad1::winactivate,ahk_id %num1%		; window: x: 592	y: 0	w: 1748	h: 1450
+^Numpad2::winactivate,ahk_id %num2%		; window: x: 990	y: 0	w: 1287	h: 1450
+^Numpad3::winactivate,ahk_id %num3%		; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
+^Numpad4::winactivate,ahk_pid %num4%	; window: x: 321	y: 0	w: 2088	h: 1459
+^Numpad5::winactivate,ahk_pid %num5% 	; window: x: 406	y: 0	w: 2003	h: 1459
+^Numpad6::winactivate,ahk_pid %num6%	; window: x: 494	y: 0	w: 1915	h: 1459
 /*
 ^Numpad7::seven_id := do(seven_id,"seven","seven_name") ; window: irr (FOLLOW CHROME)
 ^Numpad8::eight_id := do(eight_id,"eight","eight_name")	; window: x: 449	y: 70	w: 1794	h: 1320
@@ -196,55 +202,21 @@ return
 ; ############ SUBROUTINES ############
 
 runsap:
-	gui,wait:show,x0 y0 w%a_screenwidth% h%a_screenheight%
+	gui,wait:show,x0 y0 w%screenwidth% h%screenheight%,Waiting for stuff to load
+	winset,transparent,180,Waiting for stuff to load
+	
 	run,outlook.exe			; window: x: 592	y: 0	w: 1748	h: 1450
 	run,onenote.exe			; window: x: 990	y: 0	w: 1287	h: 1450
 	run,lync.exe			; window ahk_class LyncTabFrameHostWindowClass: x: 722	y: 199	w: 1396	h: 1075
-	one := winexist("ahk_exe OUTLOOK.EXE")
-	two := winexist("ahk_exe ONENOTE.EXE")
-	three := winexist("ahk_exe lync.exe")
-	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm		; window: x: 321	y: 0	w: 2088	h: 1459
-	loop,25
-		{
-		four := winexist("SAP - [Select a business role: ]")
-		if(four)
-			break
-		else
-			{
-			sleep,200
-			continue
-			}
-		}
-	controlsend,,{tab 6}{enter},ahk_id %four%
-	winwait,SAP Store Operations - Level2 - Internet Explorer
-	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm 		; window: x: 406	y: 0	w: 2003	h: 1459
-	loop,25
-		{
-		five := winexist("SAP - [Select a business role: ]")
-		if(five)
-			break
-		else
-			{
-			sleep,200
-			continue
-			}
-		}
-	controlsend,,{tab 6}{enter},ahk_id %five%
-	sleep,4000
-	controlsend,,{tab 2}{down}{tab}{enter},ahk_id %five%
-	run,iexplore.exe https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm			; window: x: 494	y: 0	w: 1915	h: 1459
-	loop,25
-		{
-		six := winexist("Select a business role: - [SAP] - Internet Explorer")
-		if(six)
-			break
-		else
-			{
-			sleep,200
-			continue
-			}
-		}
-	controlsend,,{tab 4}{enter},ahk_id %six%
+	num1 := assign("outlook")
+	num2 := assign("onenote")
+	num3 := assign("lync")
+	
+	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num4		; window: x: 321	y: 0	w: 2088	h: 1459
+	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num5
+	run,iexplore.exe https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num6		; window: x: 494	y: 0	w: 1915	h: 1459
+
+	winmove,
 	gui,wait:cancel
 return
 
@@ -275,6 +247,55 @@ search(query) {
 	sleep,200
 	send %query% {enter}
 }
+
+assign(app)
+	{
+	iniread,apptitle,lib/db.ini,running,%app%
+	loop
+		{
+		if(a_index = 25)
+			{
+			msgbox % "Could not assign " app " to key."
+			break
+			}
+		numpadkey := winexist(apptitle)
+		if(numpadkey)
+			{
+			return numpadkey
+			break
+			}
+		else
+			{
+			sleep,500
+			continue
+			}
+		}
+	}
+
+assign_r(pid)
+	{
+	loop
+		{
+		if(a_index = 25)
+			{
+			msgbox % "Could not assign process ID " pid " to key."
+			break
+			}
+		numpadkey := winexist("ahk_pid " pid)
+;		msgbox % "Round " a_index "`nI see PID: " pid " and HWND " numpadkey
+		if(numpadkey)
+			{
+			return numpadkey
+			break
+			}
+		else
+			{
+			sleep,500
+			continue
+			}
+		}
+	}
+			
 /*
 do(id,pr,n) {
 	settitlematchmode,2
