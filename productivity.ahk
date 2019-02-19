@@ -243,8 +243,8 @@ runsap:
 	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num4		; window: x: 321	y: 0	w: 2088	h: 1459
 	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num5
 	run,iexplore.exe https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num6		; window: x: 494	y: 0	w: 1915	h: 1459
-	winmove,ahk_id %num1%,,592,0,1748,1450
-	winmove,ahk_id %num2%,,990,0,1287,1450
+	winmove,ahk_id %num1%,,473,0,1398,1160
+	winmove,ahk_id %num2%,,792,0,1030,1160
 	gui,wait:cancel
 return
 
@@ -264,7 +264,7 @@ gen_dt(format := "yyyMMdd")
 
 search(query)
 	{
-	query := strreplace(query,%a_space%,+)
+	query := strreplace(query," ",yes)
 	run,https://www.google.com/search?q=%query%
 	}
 
