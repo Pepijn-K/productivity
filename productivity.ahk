@@ -9,13 +9,20 @@ settitlematchmode,2
 
 ; #### VARs ####
 login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
-scaling := 100 / 125
-screenheight := a_screenheight * scaling
-screenwidth := a_screenwidth * scaling
 
 ; #### GUIs ####
 #include lib/wait.ahk
 
+
+iniread,scaling,lib/db.ini,settings,scaling,0
+if(!scaling)
+	{
+	inputbox,scaling,Scaling percentage,Please go to "Change display settings" option in Windows to check the current display scaling setting for your main monitor. Enter the number without any other characters like the % sign.
+	iniwrite,%scaling%,lib/db.ini,settings,scaling
+	}
+dim := 100 / scaling
+screenheight := a_screenheight * dim
+screenwidth := a_screenwidth * dim
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,300
 ifmsgbox,yes
@@ -118,12 +125,12 @@ return
 		lh%a_index% := lh
 		}
 	settitlematchmode,1
-	if(winexist("ahk_id " one))
+	if(winexist("ahk_id " num1))
 		winactivate
 	else
 		{
 		run,notepad.exe
-		winwaitactive
+		winwaitactive,Untitled - Notepad
 		}
 	send,^n
 	sleep,600
@@ -140,7 +147,7 @@ Friday: %lh9%, %lh10%
 return
 
 #o::									; ask Silvia for processor of O2I ticket
-	if(winexist("ahk_id " one))
+	if(winexist("ahk_id " num1))
 		{
 		winactivate
 		send,^1{lalt}hn1
@@ -148,7 +155,7 @@ return
 	else
 		{
 		run,notepad.exe
-		winwaitactive
+		winwaitactive,Untitled - Notepad
 		}
 	send,silvia.peves@sap.com{tab 4}Ticket %clipboard%{tab}Hi Silvia,{enter 2}Could you please tell me who owns the above ticket?{enter 2}Many thanks!
 return
@@ -168,7 +175,7 @@ return
 		iniread,p,%login%,access,pw_str
 		Send,%u%{tab}%p%{enter}
 		}
-	else if(winactive(
+;	else if(winactive(
 return
 
 #y::
@@ -180,7 +187,29 @@ return
 
 #r::winmove,a,,400,25,1000,800		; move and resize active window
 
-#include lib/wiggle.ahk
+#MaxThreadsPerHotkey 2
+!#m::
+one := A_Screenwidth*.2
+two := A_Screenwidth*.3
+vert := A_Screenheight/2
+
+#MaxThreadsPerHotkey 1
+	if keep_wiggling = y
+		{
+		keep_wiggling = n
+		return
+		}
+	keep_wiggling = y
+	loop
+		{
+		if keep_wiggling = n
+			return
+		MouseMove,%one%,%vert%
+		sleep,120000
+		MouseMove,%two%,%vert%
+		sleep,400
+		}
+return
 
 ; #### Hotstrings ####
 ::mytel::{+}353 (0) 91 433532
@@ -212,19 +241,17 @@ runsap:
 	num1 := assign("outlook")
 	num2 := assign("onenote")
 	num3 := assign("lync")
-	
 	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num4		; window: x: 321	y: 0	w: 2088	h: 1459
 	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num5
 	run,iexplore.exe https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num6		; window: x: 494	y: 0	w: 1915	h: 1459
-
-	winmove,
 	gui,wait:cancel
 return
 
 
 ; ############ FUNCTIONS ############
 
-gen_dt(format := "yyyMMdd") {
+gen_dt(format := "yyyMMdd")
+	{
 	if(format = "date")
 		formattime,res,,dd-MM
 	else if(format = "time")
@@ -232,22 +259,13 @@ gen_dt(format := "yyyMMdd") {
 	else
 		formattime,res,,%format%
 	return res
-}
+	}
 
-search(query) {
-	if(winexist("ahk_exe chrome.exe"))
-		{
-		winactivate
-		send,^t
-		}
-	else
-		{
-		run,chrome.exe
-		winwaitactive
-		}
-	sleep,200
-	send %query% {enter}
-}
+search(query)
+	{
+	query := strreplace(query,%a_space%,"+")
+	run,https://www.google.com/search?q=%query%
+	}
 
 assign(app)
 	{
@@ -313,9 +331,10 @@ do(id,pr,n) {
 	return h
 }
 */
-sum(x*) {
+sum(x*)
+	{
 	tot := 0
 	for i, y in x
 		tot := y + tot
 	return tot
-}
+	}

@@ -1,8 +1,7 @@
 ﻿#MaxThreadsPerHotkey 2
 !#m::
-coordmode,mouse,screen
-one := A_Screenwidth*.46
-two := A_Screenwidth*.54
+one := A_Screenwidth*.2
+two := A_Screenwidth*.3
 vert := A_Screenheight/2
 
 #MaxThreadsPerHotkey 1
@@ -17,8 +16,8 @@ vert := A_Screenheight/2
 		if keep_wiggling = n
 			return
 		MouseMove,%one%,%vert%
-		sleep,1000
+		sleep,120000
 		MouseMove,%two%,%vert%
-		sleep,1000
+		sleep,400
 		}
 return
