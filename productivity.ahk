@@ -9,20 +9,19 @@ settitlematchmode,2
 
 ; #### VARs ####
 login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
-
-; #### GUIs ####
-#include lib/wait.ahk
-
-
 iniread,scaling,lib/db.ini,settings,scaling,0
 if(!scaling)
 	{
-	inputbox,scaling,Scaling percentage,Please go to "Change display settings" option in Windows to check the current display scaling setting for your main monitor. Enter the number without any other characters like the % sign.
+	inputbox,scaling,Scaling percentage,Please go to "Change display settings" option in Windows to check the current display scaling setting for your main monitor. Enter the number without any other characters like the percentage sign.
 	iniwrite,%scaling%,lib/db.ini,settings,scaling
 	}
 dim := 100 / scaling
 screenheight := a_screenheight * dim
 screenwidth := a_screenwidth * dim
+
+; ### GUIs ####
+#include lib/wait.ahk
+
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,300
 ifmsgbox,yes
@@ -233,7 +232,7 @@ return
 
 runsap:
 	gui,wait:show,x0 y0 w%screenwidth% h%screenheight%,Waiting for stuff to load
-	winset,transparent,180,Waiting for stuff to load
+	winset,transparent,240,Waiting for stuff to load
 	
 	run,outlook.exe			; window: x: 592	y: 0	w: 1748	h: 1450
 	run,onenote.exe			; window: x: 990	y: 0	w: 1287	h: 1450
@@ -244,6 +243,8 @@ runsap:
 	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num4		; window: x: 321	y: 0	w: 2088	h: 1459
 	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num5
 	run,iexplore.exe https://icp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num6		; window: x: 494	y: 0	w: 1915	h: 1459
+	winmove,ahk_id %num1%,,592,0,1748,1450
+	winmove,ahk_id %num2%,,990,0,1287,1450
 	gui,wait:cancel
 return
 
@@ -263,7 +264,7 @@ gen_dt(format := "yyyMMdd")
 
 search(query)
 	{
-	query := strreplace(query,%a_space%,"+")
+	query := strreplace(query,%a_space%,+)
 	run,https://www.google.com/search?q=%query%
 	}
 
