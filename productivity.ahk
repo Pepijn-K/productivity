@@ -174,11 +174,12 @@ return
 		iniread,p,%login%,access,pw_str
 		Send,%u%{tab}%p%{enter}
 		}
-	else if(winactive("Welcome | SAP Store - Mozilla Firefox")
+	else if(winactive("Welcome | SAP Store - Mozilla Firefox"))
 		{
 		iniread,u,%login%,access,usr_frank
 		iniread,p,%login%,access,pw_frank
 		send,%u%{tab}%p%{enter}
+		}
 return
 
 #y::
@@ -274,8 +275,8 @@ gen_dt(format := "yyyMMdd")
 
 search(query)
 	{
-	query := strreplace(query," ",yes)
-	run,https://www.google.com/search?q=%query%
+	query := strreplace(query," ","+")
+	run, chrome.exe https://www.google.com/search?q=%query%
 	}
 
 assign(app)
