@@ -174,7 +174,11 @@ return
 		iniread,p,%login%,access,pw_str
 		Send,%u%{tab}%p%{enter}
 		}
-;	else if(winactive(
+	else if(winactive("Welcome | SAP Store - Mozilla Firefox")
+		{
+		iniread,u,%login%,access,usr_frank
+		iniread,p,%login%,access,pw_frank
+		send,%u%{tab}%p%{enter}
 return
 
 #y::
