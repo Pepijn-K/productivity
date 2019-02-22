@@ -1,0 +1,6 @@
+WINDOW ARRANGER
+
+End goals:
+1.	Not only run my required windows but also arrange them correctly depending on which monitor I'm using
+2.	Add menu option to script icon to rearrange (not re-run) all windows
+3.	Separate the window runner from everything else so I can reload the shortcut script without either losing all numpad bindings or having to rerun everything
