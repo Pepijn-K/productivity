@@ -186,6 +186,12 @@ return
 
 #r::winmove,a,,400,25,1000,800		; move and resize active window
 
+#k::								; turn selected text into link based on clipboard
+	send,^k
+	sleep,200
+	send,^v{enter}
+return
+
 #MaxThreadsPerHotkey 2
 !#m::
 one := A_Screenwidth*.2
