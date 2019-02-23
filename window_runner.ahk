@@ -8,9 +8,10 @@ sendmode,input
 coordmode,mouse,client
 coordmode,pixel,client
 
+msgbox % a_screenwidth
 
 ; #### VARs ####
-iniread,scaling,lib/db.ini,settings,scaling,0
+; if(a_screenwidth = 
 if(!scaling)
 	{
 	inputbox,scaling,Scaling percentage,Please go to "Change display settings" option in Windows to check the current display scaling setting for your main monitor. Enter the number without any other characters like the percentage sign.
