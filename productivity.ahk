@@ -1,6 +1,7 @@
 ; ############ AUTO-EXECUTE ############
 
 #noenv
+#include C:/Users/I349302/Documents/AHK/func_lib/funcs.ahk
 setworkingdir,%a_scriptdir%
 sendmode,input
 coordmode,mouse,client
@@ -217,46 +218,3 @@ return
 	date := gen_dt()
 	send % date
 return
-
-
-; ############ FUNCTIONS ############
-
-gen_dt(format := "yyyMMdd")
-	{
-	if(format = "date")
-		formattime,res,,dd-MM
-	else if(format = "time")
-		formattime,res,,HH:mm
-	else
-		formattime,res,,%format%
-	return res
-	}
-
-search(query)
-	{
-	query := strreplace(query," ",yes)
-	run,https://www.google.com/search?q=%query%
-	}
-/*
-do(id,pr,n) {
-	settitlematchmode,2
-	if(id)
-		winactivate,ahk_id %id%
-	else
-		{
-		iniread,app,lib/db.ini,running,%pr%
-		iniread,appname,lib/db.ini,running,%n%
-		run % app
-		winwait,%appname%
-		h := winexist(appname)
-		}
-	return h
-}
-*/
-sum(x*)
-	{
-	tot := 0
-	for i, y in x
-		tot := y + tot
-	return tot
-	}

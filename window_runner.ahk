@@ -1,6 +1,7 @@
 ; ############ AUTO-EXECUTE ############
 
 #noenv
+#include C:/Users/I349302/Documents/AHK/func_lib/funcs.ahk
 #notrayicon
 #singleinstance,force
 setworkingdir,%a_scriptdir%
@@ -42,51 +43,3 @@ runsap:
 	winmove,ahk_id %num2%,,792,0,1030,1160
 	gui,wait:cancel
 return
-
-assign(app)
-	{
-	iniread,apptitle,lib/db.ini,running,%app%
-	loop
-		{
-		if(a_index = 25)
-			{
-			msgbox % "Could not assign " app " to key."
-			break
-			}
-		numpadkey := winexist(apptitle)
-		if(numpadkey)
-			{
-			return numpadkey
-			break
-			}
-		else
-			{
-			sleep,500
-			continue
-			}
-		}
-	}
-
-assign_r(pid)
-	{
-	loop
-		{
-		if(a_index = 25)
-			{
-			msgbox % "Could not assign process ID " pid " to key."
-			break
-			}
-		numpadkey := winexist("ahk_pid " pid)
-;		msgbox % "Round " a_index "`nI see PID: " pid " and HWND " numpadkey
-		if(numpadkey)
-			{
-			return numpadkey
-			break
-			}
-		else
-			{
-			sleep,500
-			continue
-			}
-		}
-	}
