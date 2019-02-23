@@ -1,6 +1,7 @@
 ; ############ AUTO-EXECUTE ############
 
 #noenv
+#include C:/Users/I349302/Documents/AHK/func_lib/funcs.ahk
 setworkingdir,%a_scriptdir%
 sendmode,input
 coordmode,mouse,client
