@@ -17,7 +17,7 @@ login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,300
 ifmsgbox,yes
-	gosub,runsap
+	run,window_runner.ahk
 
 
 ; ############ HOTKEYS ############
@@ -63,6 +63,7 @@ NumpadAdd::^t
 			search(usin)
 		}
 return
+
 +#c::									; create or edit multibox alias
 	inputbox,dest,Program/path to execute,,,240,120
 	if errorlevel
@@ -115,8 +116,8 @@ return
 			lh := "NULL"
 		lh%a_index% := lh
 		}
-	settitlematchmode,1
-	if(winexist("ahk_id " num1))
+	settitlematchmode,2
+	if(winexist("Outlook"))
 		winactivate
 	else
 		{
@@ -207,7 +208,7 @@ return
 :*:@ct::sap_cloud_terminations@sap.com{tab 2}^a{backspace}
 :*:@jana::jana.kerschl.sudekova@sap.com
 :*:@msol::marisol.torres@sap.com
-:*:@jette:jette.bork-wagenblast@sap.common
+:*:@jette:jette.bork-wagenblast@sap.com
 ::tfgit::Thanks for getting in touch.
 ::tyfyi::Thank you for your interest!
 ::tyffu::Thank you for following up.
