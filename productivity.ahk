@@ -11,9 +11,6 @@ settitlematchmode,2
 ; #### VARs ####
 login := "C:\Users\I349302\OneDrive - SAP SE\Documents\sec.ini"
 
-; ### GUIs ####
-#include lib/wait.ahk
-
 
 msgbox % sum(4,32),Working?,Run SAP related programs?,300
 ifmsgbox,yes
@@ -23,7 +20,6 @@ ifmsgbox,yes
 ; ############ HOTKEYS ############
 
 F10::reload
-F11::gui,wait: cancel
 lshift::lctrl
 capslock::lshift
 NumpadMult::^w
