@@ -6,13 +6,13 @@
 #singleinstance,force
 setworkingdir,%a_scriptdir%
 sendmode,input
-
+/*
 msgbox % a_screenwidth
 
 msgbox,4,,Continue?
 ifmsgbox,no
 	return
-
+*/
 ; #### VARs ####
 if(a_screenwidth = 1920)
 	{
