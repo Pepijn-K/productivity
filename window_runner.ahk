@@ -46,7 +46,7 @@ runsap:
 		msgbox,Outlook did not start as expected
 ;	msgbox % num1
 	num1 := winexist("Inbox - pepijn.krijnsen@sap.com")
-	num2 := assign(onenote)
+	num2 := assign("onenote")
 ;	num3 := assign("lync")
 ;	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num4		; window: x: 321	y: 0	w: 2088	h: 1459
 ;	run,iexplore.exe https://sfp.wdf.sap.corp/sap(bD1lbiZjPTAwMSZkPW1pbg==)/bc/bsp/sap/crm_ui_start/default.htm,,,num5
