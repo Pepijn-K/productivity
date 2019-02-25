@@ -135,8 +135,8 @@ return
 	send,silvia.peves@sap.com{tab 4}Ticket %clipboard%{tab}Hi Silvia,{enter 2}Could you please tell me who owns the above ticket?{enter 2}Many thanks!
 return
 
-!#l::									; login common websites
-	sleep,300
+#a::									; login common websites
+	sleep,600
 	settitlematchmode,1
 	if(winactive("Logon - Internet Explorer"))						; KCF Frontend
 		{
@@ -150,11 +150,17 @@ return
 		iniread,p,%login%,access,pw_str
 		Send,%u%{tab}%p%{enter}
 		}
-	else if(winactive("Welcome | SAP Store - Mozilla Firefox"))
+	else if(winactive("Welcome | SAP Store - Mozilla Firefox"))		; Frank
 		{
 		iniread,u,%login%,access,usr_frank
 		iniread,p,%login%,access,pw_frank
 		send,%u%{tab}%p%{enter}
+		}
+	else if(winactive("SAP"))
+		{
+		iniread,u,%login%,access,usr_kcf
+		iniread,p,%login%,access,pw_kcf
+		send,{lshift down}{tab}{lshift up}{end}{backspace}2{tab}%u%{tab}%p%{enter}
 		}
 return
 
